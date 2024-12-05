@@ -1,5 +1,4 @@
-# Example project made with gemini-py v2 (i'm really proud of this actually)
-
+# Frogger!!
 
 from gemini import *
 from input import get_key_press

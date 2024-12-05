@@ -10,14 +10,12 @@ def string_key(c: str | None) -> str:
 
 def get_key_press(is_wait = False) -> str:
 	if os.name == "nt":
-		from msvcrt import getch
+		from msvcrt import getch, kbhit
 		if is_wait:
-			while True:
-				if c := getch():
-					return string_key(c)
+			return string_key(getch())
 		else:
-			c = getch()
-			return string_key(c)
+			if kbhit():
+				return string_key(getch())
 	else:
 		import termios, fcntl, contextlib, sys
 		fd = sys.stdin.fileno()
