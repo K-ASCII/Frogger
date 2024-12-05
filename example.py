@@ -39,8 +39,8 @@ while True:
 			player.pos.y += 1
 		case 'd':
 			player.pos.x += 1
-	# if not player.bounds.is_inside(screen.bounds):
-	# 	player.pos = old_pos
+	if not player.bounds.is_inside(screen.bounds):
+		player.pos = old_pos
 
 	# Move all the bouncers. You can handle obstacles in a similar way
 	for bouncer in bouncers:

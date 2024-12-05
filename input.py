@@ -1,7 +1,7 @@
 import os
 
 def string_key(c: str | None) -> str:
-	if c is None: 
+	if c is None:
 		return None
 	if os.name == "nt":
 		c = repr(c)[2:-1].lower()
@@ -14,11 +14,8 @@ def string_key(c: str | None) -> str:
 def get_key_press(is_wait = False) -> str:
 	if os.name == "nt":
 		from msvcrt import getch, kbhit
-		if is_wait:
+		if is_wait or kbhit():
 			return string_key(getch())
-		else:
-			if kbhit():
-				return string_key(getch())
 	else:
 		import termios, fcntl, contextlib, sys
 		fd = sys.stdin.fileno()

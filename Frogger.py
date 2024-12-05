@@ -1,15 +1,11 @@
-# Frogger!!
-
 from gemini import *
 from input import get_key_press
 from time import sleep
 from random import randint
 
-
 WIDTH = 40
 HEIGHT = 20
 screen = Screen(Vector2(WIDTH, HEIGHT), " ")
-
 
 class Car(GameObject):
 	def __init__(self, pos: Vector2, direction: int):
@@ -23,7 +19,6 @@ class Car(GameObject):
 		self.pos.x += self.direction
 		if not self.bounds.intersects(screen.bounds):
 			del self
-
 
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
 cars1 = []
@@ -59,7 +54,6 @@ while True:
 	screen.draw(player)
 	for car in cars1:
 		screen.draw(car, error_outside_bounds=False)
-
 
 	screen.display()
 
