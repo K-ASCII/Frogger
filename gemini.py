@@ -131,8 +131,11 @@ class Screen:
 
 	def display(self):
 		prepare_terminal()
-		print("\x1b[H\x1b[J", end="")
+		render = ""
+		render += "\x1b[H\x1b[J"
 		for	y in range(self.size.y):
 			begin = self.size.x * y
 			end = self.size.x * (y + 1)
-			print(''.join(self._pixels[begin:end]))
+			render += ''.join(self._pixels[begin:end]) + '\n'
+
+		print(render, end='')
