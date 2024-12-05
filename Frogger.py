@@ -32,9 +32,11 @@ while True:
 
 	if t % 25 == 0:
 		cars.append(Car(Vector2(0,10), 1))
-		cars.append(Car(Vector2(40,8), -1))
+		
 
-	spawn = randint(25, 50)
+	spawn = randint(25, 75)
+	if t % spawn == 0:
+		cars.append(Car(Vector2(40,8), -1))
 
 	old_pos = player.pos.copy()
 	match input: # Player movement
