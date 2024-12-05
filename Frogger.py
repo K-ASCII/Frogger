@@ -1,8 +1,8 @@
 # Example project made with gemini-py v2 (i'm really proud of this actually)
 
 
-from gemini import *
-from input import get_key_press
+from Frogger.gemini import *
+from Frogger.input import get_key_press
 from time import sleep
 from random import randint
 
@@ -24,7 +24,7 @@ class Car(GameObject):
 		self.pos.x += self.direction
 		if not self.bounds.intersects(screen.bounds):
 			del self
-	
+
 
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
 car = Car(Vector2(0,10), 1)
@@ -58,5 +58,3 @@ while True:
 
 
 	sleep(1/30) # Run at 30 FPS
-
-
