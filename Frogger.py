@@ -55,15 +55,21 @@ while True:
 
 	if t % 25 == 0:
 		vehicles.append(Car(Vector2(0,10), 1))
+		vehicles.append(Car(Vector2(40,15), -1))
 		
 	vType = randint(0,1)
-	# spawn = randint(25, 75)
-	if t % 25 == 0:
+	if t % 30 == 0:
 		if randint(0, 2) == 0:
 			if vType == 0:
 				vehicles.append(Car(Vector2(40,8), -1))
 			else:
 				vehicles.append(Van(Vector2(40,8), -1))
+
+		if randint(0, 2) == 0:
+			if vType == 0:
+				vehicles.append(Car(Vector2(0,11), 1))
+			else:
+				vehicles.append(Van(Vector2(0,11), 1))
 		
 
 
