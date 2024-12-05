@@ -1,8 +1,8 @@
 # Example project made with gemini-py v2 (i'm really proud of this actually)
 
 
-from Frogger.gemini import *
-from Frogger.input import get_key_press
+from gemini import *
+from input import get_key_press
 from time import sleep
 from random import randint
 
