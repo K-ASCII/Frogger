@@ -1,12 +1,15 @@
 import os
 
 def string_key(c: str | None) -> str:
+	if c is None: 
+		return None
 	if os.name == "nt":
 		c = repr(c)[2:-1].lower()
 		if c == "\\x03":
 			raise KeyboardInterrupt
+		return c
 	else:
-		return c.lower() if c else None
+		return c.lower()
 
 def get_key_press(is_wait = False) -> str:
 	if os.name == "nt":
