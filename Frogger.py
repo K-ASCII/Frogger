@@ -20,8 +20,21 @@ class Car(GameObject):
 		if not self.bounds.intersects(screen.bounds):
 			del self
 
+class Van(GameObject):
+	def __init__(self, pos: Vector2, direction: int):
+		r = randint(0,255)
+		g = randint(0,255)
+		b = randint(0,255)
+		super().__init__(pos, ":==:", Colour(r,g,b))
+		self.direction = direction
+
+	def tick(self):
+		self.pos.x += self.direction
+		if not self.bounds.intersects(screen.bounds):
+			del self
+
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
-cars = []
+vehicles = []
 
 
 t = 0
@@ -31,12 +44,17 @@ while True:
 	input = get_key_press() # Returns the pressed key as a single lowercase character
 
 	if t % 25 == 0:
-		cars.append(Car(Vector2(0,10), 1))
+		vehicles.append(Car(Vector2(0,10), 1))
 		
-
+	vType = randint(0,1)
 	spawn = randint(25, 75)
 	if t % spawn == 0:
-		cars.append(Car(Vector2(40,8), -1))
+		if vType == 0:
+			vehicles.append(Car(Vector2(40,8), -1))
+		else:
+			vehicles.append(Van(Vector2(40,8), -1))
+		
+
 
 	old_pos = player.pos.copy()
 	match input: # Player movement
@@ -52,13 +70,14 @@ while True:
 		player.pos = old_pos
 
 	if t % 3 == 0:
-		for car in cars:
-			car.tick() # Player is passed because they might collide
+		for car in vehicles:
+			car.tick()
+			 # Player is passed because they might collide
 
 	screen.clear()
 
 	screen.draw(player)
-	for car in cars:
+	for car in vehicles:
 		screen.draw(car, error_outside_bounds=False)
 
 	screen.display()
