@@ -33,6 +33,16 @@ class Van(GameObject):
 		if not self.bounds.intersects(screen.bounds):
 			del self
 
+class Log(GameObject):
+	def __init__(self, pos: Vector2, direction: int):
+		super().__init__(pos, "====", Colour(125,100,30))
+		self.direction = direction
+
+	def tick(self):
+		self.pos.x += self.direction
+		if not self.bounds.intersects(screen.bounds):
+			del self
+
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
 vehicles = []
 
