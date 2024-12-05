@@ -13,6 +13,7 @@ def sleep_at_fps(fps: float):
 	global _last_called
 	elapsed = time.time() - _last_called
 	if elapsed >= 1 / fps:
+		_last_called = time.time()
 		return
 	time.sleep(1 / fps - elapsed)
 	_last_called = time.time()
