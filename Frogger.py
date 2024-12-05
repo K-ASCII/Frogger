@@ -26,13 +26,18 @@ class Car(GameObject):
 
 
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
-car = Car(Vector2(0,10), 1)
+cars1 = []
 
+t = 0
 
 while True:
+	t += 1
 	input = get_key_press() # Returns the pressed key as a single lowercase character
 
+	if t % 25 == 0:
+		cars1.append(Car(Vector2(0,10), 1))
 
+	old_pos = player.pos.copy()
 	match input: # Player movement
 		case 'w':
 			player.pos.y -= 1
@@ -42,18 +47,21 @@ while True:
 			player.pos.y += 1
 		case 'd':
 			player.pos.x += 1
+	if not player.bounds.is_inside(screen.bounds):
+		player.pos = old_pos
 
-
-	car.tick() # Player is passed because they might collide
-
+	if t % 3 == 0:
+		for car in cars1:
+			car.tick() # Player is passed because they might collide
 
 	screen.clear()
 
 	screen.draw(player)
-	screen.draw(car)
+	for car in cars1:
+		screen.draw(car, error_outside_bounds=False)
 
 
 	screen.display()
 
-
-	sleep(1/30) # Run at 30 FPS
+	sleep_at_fps(20)
+	# sleep(1/30) # Ru?n at 30 FPS
