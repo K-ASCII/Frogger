@@ -21,7 +21,8 @@ class Car(GameObject):
 			del self
 
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
-cars1 = []
+cars = []
+
 
 t = 0
 
@@ -30,7 +31,10 @@ while True:
 	input = get_key_press() # Returns the pressed key as a single lowercase character
 
 	if t % 25 == 0:
-		cars1.append(Car(Vector2(0,10), 1))
+		cars.append(Car(Vector2(0,10), 1))
+		cars.append(Car(Vector2(40,8), -1))
+
+	spawn = randint(25, 50)
 
 	old_pos = player.pos.copy()
 	match input: # Player movement
@@ -46,13 +50,13 @@ while True:
 		player.pos = old_pos
 
 	if t % 3 == 0:
-		for car in cars1:
+		for car in cars:
 			car.tick() # Player is passed because they might collide
 
 	screen.clear()
 
 	screen.draw(player)
-	for car in cars1:
+	for car in cars:
 		screen.draw(car, error_outside_bounds=False)
 
 	screen.display()
