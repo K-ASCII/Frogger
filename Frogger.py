@@ -96,6 +96,8 @@ while alive:
 	for car in vehicles:
 		screen.draw(car, error_outside_bounds=False)
 
+	screen.draw(GameObject(Vector2(0,0), f"Lives: {lives}"))
+
 	screen.display()
 
 	sleep_at_fps(20)
