@@ -1,7 +1,7 @@
 from gemini import *
 from input import get_key_press
 from time import sleep
-from random import randint
+from random import randint, choice
 
 WIDTH = 40
 HEIGHT = 20
@@ -12,20 +12,9 @@ class Car(GameObject):
 		r = randint(0,255)
 		g = randint(0,255)
 		b = randint(0,255)
-		super().__init__(pos, ":=:", Colour(r,g,b))
-		self.direction = direction
+		texture = choice([":=:", ":==:"])
 
-	def tick(self):
-		self.pos.x += self.direction
-		if not self.bounds.intersects(screen.bounds):
-			del self
-
-class Van(GameObject):
-	def __init__(self, pos: Vector2, direction: int):
-		r = randint(0,255)
-		g = randint(0,255)
-		b = randint(0,255)
-		super().__init__(pos, ":==:", Colour(r,g,b))
+		super().__init__(pos, texture, Colour(r,g,b))
 		self.direction = direction
 
 	def tick(self):
@@ -56,20 +45,13 @@ while True:
 	if t % 25 == 0:
 		vehicles.append(Car(Vector2(0,10), 1))
 		vehicles.append(Car(Vector2(40,15), -1))
-		
-	vType = randint(0,1)
+	
 	if t % 30 == 0:
 		if randint(0, 2) == 0:
-			if vType == 0:
-				vehicles.append(Car(Vector2(40,8), -1))
-			else:
-				vehicles.append(Van(Vector2(40,8), -1))
+			vehicles.append(Car(Vector2(40,8), -1))
 
 		if randint(0, 2) == 0:
-			if vType == 0:
-				vehicles.append(Car(Vector2(0,11), 1))
-			else:
-				vehicles.append(Van(Vector2(0,11), 1))
+			vehicles.append(Car(Vector2(0,11), 1))
 		
 
 
