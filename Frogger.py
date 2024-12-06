@@ -36,11 +36,12 @@ class Log(GameObject):
 #spawn frog
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
 vehicles = []
+lives = 5
 
 
 t = 0
-
-while True:
+alive = True
+while alive:
 	t += 1
 	input = get_key_press() # Returns the pressed key as a single lowercase character
 
@@ -77,10 +78,17 @@ while True:
 			 # Player is passed because they might collide
 
 
+	
+
 	# DEATH TO THE FROG
+	
 	for vehicle in vehicles:
 		if player.bounds.intersects(vehicle.bounds):
 			player.pos = Vector2(20,19)
+			lives -= 1
+			if lives <= 0:
+				alive = False
+
 
 	screen.clear()
 
@@ -92,3 +100,5 @@ while True:
 
 	sleep_at_fps(20)
 	# sleep(1/30) # Ru?n at 30 FPS
+
+print("GAME OVER")
