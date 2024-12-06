@@ -78,7 +78,6 @@ def process_cars(frame: int):
 		i = -1
 		while i + 1 < len(vehicles):
 			i += 1
-			print(i)
 			if vehicles[i].tick():
 				vehicles.pop(i)
 				i -= 1
@@ -102,7 +101,6 @@ def process_logs(frame: int):
 		i = -1
 		while i + 1 < len(logs):
 			i += 1
-			print(i)
 			if logs[i].tick():
 				logs.pop(i)
 				i -= 1
