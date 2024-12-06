@@ -3,9 +3,31 @@ from input import get_key_press
 from time import sleep
 from random import randint, choice
 
-WIDTH = 40
+WIDTH = 41
 HEIGHT = 20
 screen = Screen(Vector2(WIDTH, HEIGHT), " ")
+
+BACKGROUND = """
+     ╔═╗    ╔═╗    ╔═╗    ╔═╗    ╔═╗
+═════╝ ╚════╝ ╚════╝ ╚════╝ ╚════╝ ╚═════
+
+
+
+══════════╗      ╔═════╗      ╔══════════
+══════════╝      ╚═════╝      ╚══════════
+
+
+
+
+╗      ╔═════════════════════════╗      ╔
+╝      ╚═════════════════════════╝      ╚
+
+
+╗                                       ╔
+║                                       ║
+╚═════════════════╗   ╔═════════════════╝
+                  ║   ║
+"""
 
 class Car(GameObject):
 	def __init__(self, pos: Vector2, direction: int):
@@ -17,10 +39,11 @@ class Car(GameObject):
 		super().__init__(pos, texture, Colour(r,g,b))
 		self.direction = direction
 
-	def tick(self):
+	# Return true if the car has left the screen
+	def tick(self) -> bool:
 		self.pos.x += self.direction
 		if not self.bounds.intersects(screen.bounds):
-			del self
+			return True
 
 class Log(GameObject):
 	def __init__(self, pos: Vector2, direction: int):
@@ -35,26 +58,34 @@ class Log(GameObject):
 # spawning the cars and vans
 def process_cars(frame: int):
 	spawn_locations = [
-		(10, 1),
-		(14, 1),
+		( 8, -2),
+		( 9,  2),
+		(10, -1),
+		(11,  1),
+		(14,  1),
 		(15, -1),
-		(8, -1),
-		(11, 1),
 	]
 
 	for spawn_location in spawn_locations:
-		if frame % 25 == 0:
+		if frame % (25 / abs(spawn_location[1])) == 0:
 			if randint(0, 5) < 3:
-				x = -4 if spawn_location[1] == 1 else WIDTH
+				x = -4 if spawn_location[1] > 0 else WIDTH
 				vehicles.append(Car(Vector2(x, spawn_location[0]), spawn_location[1]))
 
+	# Move existing cars
 	if frame % 3 == 0:
-		for car in vehicles:
-			car.tick()
+		i = -1
+		while i + 1 < len(vehicles):
+			i += 1
+			print(i)
+			if vehicles[i].tick():
+				vehicles.pop(i)
+				i -= 1
 
 
 #spawn frog
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
+bushes = GameObject(Vector2(0,0), BACKGROUND, Colour(50, 200, 50))
 vehicles = []
 lives = 5
 
@@ -79,7 +110,7 @@ while alive:
 			player.pos.y += 1
 		case 'd':
 			player.pos.x += 1
-	if not player.bounds.is_inside(screen.bounds):
+	if not player.bounds.is_inside(screen.bounds) or bushes.draws_on_pos(player.pos):
 		player.pos = old_pos
 
 	# DEATH TO THE FROG
@@ -90,8 +121,9 @@ while alive:
 			if lives <= 0:
 				alive = False
 
-
 	screen.clear()
+
+	screen.draw(bushes)
 
 	screen.draw(player)
 	for car in vehicles:
@@ -100,6 +132,7 @@ while alive:
 	screen.draw(GameObject(Vector2(0,0), f"Lives: {lives}"))
 
 	screen.display()
+	print(len(vehicles))
 
 	sleep_at_fps(20)
 	# sleep(1/30) # Ru?n at 30 FPS

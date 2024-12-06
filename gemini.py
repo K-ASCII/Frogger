@@ -87,6 +87,17 @@ class GameObject:
 		self.texture = texture
 		self.colour = colour
 
+	def draws_on_pos(self, pos: Vector2) -> bool:
+		lines = self.texture.splitlines()
+		if pos.y < self.pos.y or pos.y > self.pos.y + len(lines):
+			return False
+
+		line = lines[pos.y - self.pos.y]
+		if pos.x < self.pos.x or pos.x > self.pos.x + len(line):
+			return False
+
+		return line[pos.x - self.pos.x] != ' '
+
 class Screen:
 	@property
 	def bounds(self) -> Rect:
