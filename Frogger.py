@@ -32,12 +32,34 @@ class Log(GameObject):
 		if not self.bounds.intersects(screen.bounds):
 			del self
 
+# spawning the cars and vans
+def process_cars(frame: int):
+	spawn_locations = [
+		(10, 1),
+		(14, 1),
+		(15, -1),
+		(8, -1),
+		(11, 1),
+	]
+
+	for spawn_location in spawn_locations:
+		if frame % 25 == 0:
+			if randint(0, 5) < 3:
+				x = -4 if spawn_location[1] == 1 else WIDTH
+				vehicles.append(Car(Vector2(x, spawn_location[0]), spawn_location[1]))
+
+	if frame % 3 == 0:
+		for car in vehicles:
+			car.tick()
+
 
 #spawn frog
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
 vehicles = []
 lives = 5
 
+for i in range(WIDTH * 3):
+	process_cars(i)
 
 t = 0
 alive = True
@@ -45,19 +67,7 @@ while alive:
 	t += 1
 	input = get_key_press() # Returns the pressed key as a single lowercase character
 
-	#spawning the cars and vans
-	if t % 25 == 0:
-		vehicles.append(Car(Vector2(0,10), 1))
-		vehicles.append(Car(Vector2(40,15), -1))
-	# " "
-	if t % 30 == 0:
-		if randint(0, 2) == 0:
-			vehicles.append(Car(Vector2(40,8), -1))
-
-		if randint(0, 2) == 0:
-			vehicles.append(Car(Vector2(0,11), 1))
-		
-	
+	process_cars(t)
 
 	old_pos = player.pos.copy()
 	match input: # Player movement
@@ -72,16 +82,7 @@ while alive:
 	if not player.bounds.is_inside(screen.bounds):
 		player.pos = old_pos
 
-	if t % 3 == 0:
-		for car in vehicles:
-			car.tick()
-			 # Player is passed because they might collide
-
-
-	
-
 	# DEATH TO THE FROG
-	
 	for vehicle in vehicles:
 		if player.bounds.intersects(vehicle.bounds):
 			player.pos = Vector2(20,19)
