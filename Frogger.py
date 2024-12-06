@@ -122,23 +122,23 @@ t = 0
 alive = True
 while alive:
 	t += 1
-	input = get_key_press() # Returns the pressed key as a single lowercase character
 
 	process_cars(t)
 	process_logs(t)
 
-	old_pos = player.pos.copy()
-	match input: # Player movement
-		case 'w':
-			player.pos.y -= 1
-		case 'a':
-			player.pos.x -= 1
-		case 's':
-			player.pos.y += 1
-		case 'd':
-			player.pos.x += 1
-	if not player.bounds.is_inside(screen.bounds) or bushes.draws_on_pos(player.pos):
-		player.pos = old_pos
+	while input := get_key_press():
+		old_pos = player.pos.copy()
+		match input: # Player movement
+			case 'w':
+				player.pos.y -= 1
+			case 'a':
+				player.pos.x -= 1
+			case 's':
+				player.pos.y += 1
+			case 'd':
+				player.pos.x += 1
+		if not player.bounds.is_inside(screen.bounds) or bushes.draws_on_pos(player.pos):
+			player.pos = old_pos
 
 	# DEATH TO THE FROG
 	for vehicle in vehicles:
