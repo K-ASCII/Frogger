@@ -32,6 +32,8 @@ class Log(GameObject):
 		if not self.bounds.intersects(screen.bounds):
 			del self
 
+
+#spawn frog
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
 vehicles = []
 
@@ -42,10 +44,11 @@ while True:
 	t += 1
 	input = get_key_press() # Returns the pressed key as a single lowercase character
 
+	#spawning the cars and vans
 	if t % 25 == 0:
 		vehicles.append(Car(Vector2(0,10), 1))
 		vehicles.append(Car(Vector2(40,15), -1))
-	
+	# " "
 	if t % 30 == 0:
 		if randint(0, 2) == 0:
 			vehicles.append(Car(Vector2(40,8), -1))
@@ -53,7 +56,7 @@ while True:
 		if randint(0, 2) == 0:
 			vehicles.append(Car(Vector2(0,11), 1))
 		
-
+	
 
 	old_pos = player.pos.copy()
 	match input: # Player movement
@@ -72,6 +75,12 @@ while True:
 		for car in vehicles:
 			car.tick()
 			 # Player is passed because they might collide
+
+
+	# DEATH TO THE FROG
+	for vehicle in vehicles:
+		if player.bounds.intersects(vehicle.bounds):
+			player.pos = Vector2(20,19)
 
 	screen.clear()
 
