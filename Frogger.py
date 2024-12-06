@@ -173,9 +173,7 @@ while alive:
 	screen.draw(GameObject(Vector2(0,0), f"Lives: {lives}"))
 
 	screen.display()
-	print(len(vehicles))
 
 	sleep_at_fps(20)
-	# sleep(1/30) # Ru?n at 30 FPS
 
-print("GAME OVER")
+print("\rGAME OVER")
