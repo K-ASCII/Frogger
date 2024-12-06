@@ -45,17 +45,18 @@ class Car(GameObject):
 		if not self.bounds.intersects(screen.bounds):
 			return True
 
-class Log(GameObject):
+# Log inherits from car, meaning that we don't need to write the `tick()` method
+class Log(Car):
 	def __init__(self, pos: Vector2, direction: int):
-		super().__init__(pos, "====", Colour(125,100,30))
-		self.direction = direction
+		super().__init__(pos, direction)
+		self.texture = "===="
+		# Set the colour to a variant of brown
+		self.colour = Colour(60, 40, 20)
+		self.colour.r += randint(-20, 20)
+		self.colour.g += randint(-20, 20)
+		self.colour.b += randint(-20, 20)
 
-	def tick(self):
-		self.pos.x += self.direction
-		if not self.bounds.intersects(screen.bounds):
-			del self
-
-# spawning the cars and vans
+# processing of cars/vans
 def process_cars(frame: int):
 	spawn_locations = [
 		( 8, -2),
@@ -68,8 +69,8 @@ def process_cars(frame: int):
 
 	for spawn_location in spawn_locations:
 		if frame % (25 / abs(spawn_location[1])) == 0:
-			if randint(0, 5) < 3:
-				x = -4 if spawn_location[1] > 0 else WIDTH
+			if randint(0, 10) < 9:
+				x = -3 if spawn_location[1] > 0 else WIDTH
 				vehicles.append(Car(Vector2(x, spawn_location[0]), spawn_location[1]))
 
 	# Move existing cars
@@ -82,15 +83,40 @@ def process_cars(frame: int):
 				vehicles.pop(i)
 				i -= 1
 
+# processing of logs
+def process_logs(frame: int):
+	spawn_locations = [
+		( 3, 1),
+		( 4, -1),
+		( 5, 1),
+	]
+
+	for spawn_location in spawn_locations:
+		if frame % (25 / abs(spawn_location[1])) == 0:
+			if randint(0, 10) < 6:
+				x = -4 if spawn_location[1] > 0 else WIDTH
+				logs.append(Log(Vector2(x, spawn_location[0]), spawn_location[1]))
+
+	# Move existing logs
+	if frame % 4 == 0:
+		i = -1
+		while i + 1 < len(logs):
+			i += 1
+			print(i)
+			if logs[i].tick():
+				logs.pop(i)
+				i -= 1
 
 #spawn frog
 player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
 bushes = GameObject(Vector2(0,0), BACKGROUND, Colour(50, 200, 50))
 vehicles = []
+logs = []
 lives = 5
 
 for i in range(WIDTH * 3):
 	process_cars(i)
+	process_logs(i)
 
 t = 0
 alive = True
@@ -99,6 +125,7 @@ while alive:
 	input = get_key_press() # Returns the pressed key as a single lowercase character
 
 	process_cars(t)
+	process_logs(t)
 
 	old_pos = player.pos.copy()
 	match input: # Player movement
@@ -120,11 +147,25 @@ while alive:
 			lives -= 1
 			if lives <= 0:
 				alive = False
+	if player.pos.y in [3, 4, 5]:
+		on_log = False
+		for log in logs:
+			if player.bounds.intersects(log.bounds):
+				on_log = True
+				break
+
+		if not on_log:
+			player.pos = Vector2(20,19)
+			lives -= 1
+			if lives <= 0:
+				alive = False
 
 	screen.clear()
 
 	screen.draw(bushes)
 
+	for log in logs:
+		screen.draw(log, error_outside_bounds=False)
 	screen.draw(player)
 	for car in vehicles:
 		screen.draw(car, error_outside_bounds=False)
