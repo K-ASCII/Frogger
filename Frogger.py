@@ -110,6 +110,7 @@ player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
 bushes = GameObject(Vector2(0,0), BACKGROUND, Colour(50, 200, 50))
 vehicles = []
 logs = []
+winPos = []
 lives = 5
 
 for i in range(WIDTH * 3):
@@ -137,6 +138,17 @@ while alive:
 				player.pos.x += 1
 		if not player.bounds.is_inside(screen.bounds) or bushes.draws_on_pos(player.pos):
 			player.pos = old_pos
+
+	# win conditions
+	if player.pos.y == 2:
+		if player.pos not in winPos:
+			winPos.append (player.pos.copy())
+			if len(winPos) == 5:
+				alive = False
+			else:	
+				player.pos = Vector2(20,19)
+		else:
+			player.pos.y += 1
 
 	# DEATH TO THE FROG
 	for vehicle in vehicles:
@@ -170,8 +182,15 @@ while alive:
 
 	screen.draw(GameObject(Vector2(0,0), f"Lives: {lives}"))
 
+	for pos in winPos:
+		screen.draw(GameObject(pos, "X", Colour(0,200,0)))
+
 	screen.display()
 
 	sleep_at_fps(20)
 
-print("\rGAME OVER")
+
+if lives > 0:
+	print("\rYOU WIN")
+else:
+	print("\rGAME OVER")
