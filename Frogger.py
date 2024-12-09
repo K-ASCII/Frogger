@@ -23,15 +23,16 @@ START_BACKGROUND = """
 ║                                       ║
 ║                                       ║
 ║                                       ║
-╝                                       ╚
-                                         
-╗                                       ╔
+║                                       ║
+║                                       ║
+║                                       ║
 ╚═══════════════════════════════════════╝
 """
 
 start_screen = GameObject(Vector2(0,0), START_BACKGROUND, Colour(50, 200, 50))
-start_cars = []
-t = 0
+
+
+
 
 screen.draw(start_screen)
 screen.draw(GameObject(Vector2(17,8),"FROGGER", Colour(0,225,0)))
