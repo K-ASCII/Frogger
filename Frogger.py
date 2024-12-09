@@ -7,6 +7,95 @@ WIDTH = 41
 HEIGHT = 20
 screen = Screen(Vector2(WIDTH, HEIGHT), " ")
 
+
+
+START_BACKGROUND = """
+╔═══════════════════════════════════════╗
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+╝                                       ╚
+                                         
+╗                                       ╔
+╚═══════════════════════════════════════╝
+"""
+
+"""
+start_screen = GameObject(Vector2(0,0), START_BACKGROUND, Colour(50, 200, 50))
+start_cars = []
+t = 0
+
+
+class Start_car(GameObject):
+	def __init__(self, pos: Vector2, direction: int):
+		r = randint(0,255)
+		g = randint(0,255)
+		b = randint(0,255)
+
+		super().__init__(pos, ":=:", Colour(r,g,b))
+		self.direction = direction
+
+	# Return true if the car has left the screen
+	def tick(self) -> bool:
+		self.pos.x += self.direction
+		if not self.bounds.intersects(screen.bounds):
+			return True
+
+def process_cars(frame: int):
+	spawn_locations = [
+		(16, -1),
+		(3,  1),
+	]
+
+	for spawn_location in spawn_locations:
+		if frame % (25 / abs(spawn_location[1])) == 0:
+			if randint(0, 10) < 9:
+				x = -3 if spawn_location[1] > 0 else WIDTH
+				start_cars.append(Start_car(Vector2(x, spawn_location[0]), spawn_location[1]))
+
+	# Move existing cars
+	if frame % 3 == 0:
+		i = -1
+		while i + 1 < len(start_cars):
+			i += 1
+			if start_cars[i].tick():
+				start_cars.pop(i)
+				i -= 1
+
+for i in range(WIDTH * 3):
+	process_cars(i)
+
+
+
+while True:
+	if  get_key_press(is_wait=True) == 'e':
+		break
+	else:
+		t += 1
+		process_cars(t)
+
+		screen.draw(start_screen)
+		screen.draw(GameObject(Vector2(17,8),"FROGGER", Colour(0,225,0)))
+		screen.draw(GameObject(Vector2(20,9),"X", Colour(0,225,0)))
+		screen.draw(GameObject(Vector2(12,10),"PRESS 'e' TO START"))
+
+		screen.display()
+
+"""
+
+"""
+Main Game
+"""
+
 BACKGROUND = """
      ╔═╗    ╔═╗    ╔═╗    ╔═╗    ╔═╗
 ═════╝ ╚════╝ ╚════╝ ╚════╝ ╚════╝ ╚═════
@@ -28,7 +117,6 @@ BACKGROUND = """
 ╚═════════════════╗   ╔═════════════════╝
                   ║   ║
 """
-
 class Car(GameObject):
 	def __init__(self, pos: Vector2, direction: int):
 		r = randint(0,255)
