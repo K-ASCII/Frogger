@@ -7,6 +7,49 @@ WIDTH = 41
 HEIGHT = 20
 screen = Screen(Vector2(WIDTH, HEIGHT), " ")
 
+
+
+START_BACKGROUND = """
+╔═══════════════════════════════════════╗
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+╚═══════════════════════════════════════╝
+"""
+
+start_screen = GameObject(Vector2(0,0), START_BACKGROUND, Colour(50, 200, 50))
+
+
+
+
+screen.draw(start_screen)
+screen.draw(GameObject(Vector2(17,8),"FROGGER", Colour(0,225,0)))
+screen.draw(GameObject(Vector2(20,9),"X", Colour(0,225,0)))
+screen.draw(GameObject(Vector2(12,10),"PRESS 'e' TO START"))
+
+screen.display()
+
+while get_key_press(is_wait=True) != 'e':
+	pass
+
+
+
+"""
+Main Game
+"""
+
 BACKGROUND = """
      ╔═╗    ╔═╗    ╔═╗    ╔═╗    ╔═╗
 ═════╝ ╚════╝ ╚════╝ ╚════╝ ╚════╝ ╚═════
@@ -28,7 +71,6 @@ BACKGROUND = """
 ╚═════════════════╗   ╔═════════════════╝
                   ║   ║
 """
-
 class Car(GameObject):
 	def __init__(self, pos: Vector2, direction: int):
 		r = randint(0,255)
