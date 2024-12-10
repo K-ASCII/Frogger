@@ -7,70 +7,6 @@ WIDTH = 41
 HEIGHT = 20
 screen = Screen(Vector2(WIDTH, HEIGHT), " ")
 
-
-
-START_BACKGROUND = """
-╔═══════════════════════════════════════╗
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-║                                       ║
-╚═══════════════════════════════════════╝
-"""
-
-start_screen = GameObject(Vector2(0,0), START_BACKGROUND, Colour(50, 200, 50))
-
-
-
-
-screen.draw(start_screen)
-screen.draw(GameObject(Vector2(17,8),"FROGGER", Colour(0,225,0)))
-screen.draw(GameObject(Vector2(20,9),"X", Colour(0,225,0)))
-screen.draw(GameObject(Vector2(12,10),"PRESS 'e' TO START"))
-
-screen.display()
-
-while get_key_press(is_wait=True) != 'e':
-	pass
-
-
-
-"""
-Main Game
-"""
-
-BACKGROUND = """
-     ╔═╗    ╔═╗    ╔═╗    ╔═╗    ╔═╗
-═════╝ ╚════╝ ╚════╝ ╚════╝ ╚════╝ ╚═════
-
-
-
-══════════╗      ╔═════╗      ╔══════════
-══════════╝      ╚═════╝      ╚══════════
-
-
-
-
-╗      ╔═════════════════════════╗      ╔
-╝      ╚═════════════════════════╝      ╚
-
-
-╗                                       ╔
-║                                       ║
-╚═════════════════╗   ╔═════════════════╝
-                  ║   ║
-"""
 class Car(GameObject):
 	def __init__(self, pos: Vector2, direction: int):
 		r = randint(0,255)
@@ -97,6 +33,103 @@ class Log(Car):
 		self.colour.r += randint(-20, 20)
 		self.colour.g += randint(-20, 20)
 		self.colour.b += randint(-20, 20)
+
+"""
+Start screen
+"""
+
+START_BACKGROUND = """
+╔═══════════════════════════════════════╗
+╝                                       ╚
+
+╗                                       ╔
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+║                                       ║
+╝                                       ╚
+
+╗                                       ╔
+╚═══════════════════════════════════════╝
+"""
+
+start_screen = GameObject(Vector2(0,0), START_BACKGROUND, Colour(50, 200, 50))
+start_cars = []
+
+def process_start_cars(frame: int):
+	if frame % 10 == 0:
+		start_cars.append(Car(Vector2(-3, 3), 1))
+		start_cars[-1].texture = ":=:"
+		start_cars.append(Car(Vector2(WIDTH, 15), -1))
+		start_cars[-1].texture = ":=:"
+	if frame % 2 == 0:
+		i = -1
+		while i + 1 < len(start_cars):
+			i += 1
+			if start_cars[i].tick():
+				start_cars.pop(i)
+				i -= 1
+
+for i in range(WIDTH * 2):
+	process_start_cars(i)
+
+t = 0
+while get_key_press() != 'e':
+	t += 1
+
+	process_start_cars(t)
+
+	screen.clear()
+
+	screen.draw(start_screen)
+	screen.draw(GameObject(Vector2(16,8),"FROGGER", Colour(0,225,0)))
+	screen.draw(GameObject(Vector2(19,9),"X", Colour(0,225,0)))
+	screen.draw(GameObject(Vector2(12,10),"PRESS E TO START"))
+	for car in start_cars:
+		screen.draw(car, error_outside_bounds=False)
+
+	screen.display()
+
+	sleep_at_fps(20)
+
+"""
+Main Game
+"""
+
+BACKGROUND = """
+     ╔═╗    ╔═╗    ╔═╗    ╔═╗    ╔═╗
+═════╝ ╚════╝ ╚════╝ ╚════╝ ╚════╝ ╚═════
+
+
+
+══════════╗      ╔═════╗      ╔══════════
+══════════╝      ╚═════╝      ╚══════════
+
+
+
+
+╗      ╔═════════════════════════╗      ╔
+╝      ╚═════════════════════════╝      ╚
+
+
+╗                                       ╔
+║                                       ║
+╚═════════════════╗   ╔═════════════════╝
+                  ║   ║
+"""
+
+#spawn frog
+player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
+bushes = GameObject(Vector2(0,0), BACKGROUND, Colour(50, 200, 50))
+vehicles = []
+logs = []
+winPos = []
+lives = 5
 
 # processing of cars/vans
 def process_cars(frame: int):
@@ -147,14 +180,6 @@ def process_logs(frame: int):
 				logs.pop(i)
 				i -= 1
 
-#spawn frog
-player = GameObject(Vector2(20, 19), "X", Colour(0, 255, 0))
-bushes = GameObject(Vector2(0,0), BACKGROUND, Colour(50, 200, 50))
-vehicles = []
-logs = []
-winPos = []
-lives = 5
-
 for i in range(WIDTH * 3):
 	process_cars(i)
 	process_logs(i)
@@ -187,7 +212,7 @@ while alive:
 			winPos.append (player.pos.copy())
 			if len(winPos) == 5:
 				alive = False
-			else:	
+			else:
 				player.pos = Vector2(20,19)
 		else:
 			player.pos.y += 1
