@@ -1,11 +1,19 @@
 import os
 
-_arrow_keys = {
-	"A": "up",
-	"B": "down",
-	"C": "right",
-	"D": "left",
-}
+if os.name == "nt":
+	_arrow_keys = {
+		"h": "up",
+		"p": "down",
+		"m": "right",
+		"k": "left",
+	}
+else:
+	_arrow_keys = {
+		"A": "up",
+		"B": "down",
+		"C": "right",
+		"D": "left",
+	}
 
 def string_key(c: str | None) -> str:
 	if c is None:
@@ -14,6 +22,8 @@ def string_key(c: str | None) -> str:
 		c = repr(c)[2:-1].lower()
 		if c == "\\x03":
 			raise KeyboardInterrupt
+		if c == "\\xe0":
+			return f"{_arrow_keys[get_key_press()]}_arrow"
 		return c
 	else:
 		if c == "\x1b":
