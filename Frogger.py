@@ -131,6 +131,9 @@ logs = []
 winPos = []
 lives = 5
 
+CAR_SPEED = 4
+LOG_SPEED = 6
+
 # processing of cars/vans
 def process_cars(frame: int):
 	spawn_locations = [
@@ -144,12 +147,12 @@ def process_cars(frame: int):
 
 	for spawn_location in spawn_locations:
 		if frame % (25 / abs(spawn_location[1])) == 0:
-			if randint(0, 10) < 9:
+			if randint(0, 10) < 8:
 				x = -3 if spawn_location[1] > 0 else WIDTH
 				vehicles.append(Car(Vector2(x, spawn_location[0]), spawn_location[1]))
 
 	# Move existing cars
-	if frame % 3 == 0:
+	if frame % CAR_SPEED == 0:
 		i = -1
 		while i + 1 < len(vehicles):
 			i += 1
@@ -172,7 +175,7 @@ def process_logs(frame: int):
 				logs.append(Log(Vector2(x, spawn_location[0]), spawn_location[1]))
 
 	# Move existing logs
-	if frame % 4 == 0:
+	if frame % LOG_SPEED == 0:
 		i = -1
 		while i + 1 < len(logs):
 			i += 1
@@ -229,6 +232,8 @@ while alive:
 		for log in logs:
 			if player.bounds.intersects(log.bounds):
 				on_log = True
+				if t % LOG_SPEED == 0:
+					player.pos.x += log.direction
 				break
 
 		if not on_log:
