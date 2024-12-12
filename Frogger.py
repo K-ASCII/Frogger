@@ -198,13 +198,13 @@ while alive:
 	while input := get_key_press():
 		old_pos = player.pos.copy()
 		match input: # Player movement
-			case 'w':
+			case 'w' | 'up_arrow':
 				player.pos.y -= 1
-			case 'a':
+			case 'a' | 'left_arrow':
 				player.pos.x -= 1
-			case 's':
+			case 's' | 'down_arrow':
 				player.pos.y += 1
-			case 'd':
+			case 'd' | 'right_arrow':
 				player.pos.x += 1
 		if not player.bounds.is_inside(screen.bounds) or bushes.draws_on_pos(player.pos):
 			player.pos = old_pos

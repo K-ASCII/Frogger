@@ -1,5 +1,12 @@
 import os
 
+_arrow_keys = {
+	"A": "up",
+	"B": "down",
+	"C": "right",
+	"D": "left",
+}
+
 def string_key(c: str | None) -> str:
 	if c is None:
 		return None
@@ -9,12 +16,15 @@ def string_key(c: str | None) -> str:
 			raise KeyboardInterrupt
 		return c
 	else:
+		if c == "\x1b":
+			get_key_press() # skip [
+			return f"{_arrow_keys[get_key_press()]}_arrow"
 		return c.lower()
 
-def get_key_press(is_wait = False) -> str:
+def get_key_press(wait = False) -> str:
 	if os.name == "nt":
 		from msvcrt import getch, kbhit
-		if is_wait or kbhit():
+		if wait or kbhit():
 			return string_key(getch())
 	else:
 		import termios, fcntl, contextlib, sys
@@ -29,7 +39,7 @@ def get_key_press(is_wait = False) -> str:
 		fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 
 		try:
-			if is_wait:
+			if wait:
 				while True:
 					with contextlib.suppress(IOError):
 						if c := sys.stdin.read(1):
