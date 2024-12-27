@@ -1,21 +1,21 @@
 import os
 
 if os.name == "nt":
-	_arrow_keys = {
+	_ARROW_KEYS = {
 		"h": "up",
 		"p": "down",
 		"m": "right",
 		"k": "left",
 	}
 else:
-	_arrow_keys = {
-		"A": "up",
-		"B": "down",
-		"C": "right",
-		"D": "left",
+	_ARROW_KEYS = {
+		"a": "up",
+		"b": "down",
+		"c": "right",
+		"d": "left",
 	}
 
-def string_key(c: str | None) -> str:
+def string_key(c: str | None) -> str | None:
 	if c is None:
 		return None
 	if os.name == "nt":
@@ -23,15 +23,15 @@ def string_key(c: str | None) -> str:
 		if c == "\\x03":
 			raise KeyboardInterrupt
 		if c == "\\xe0":
-			return f"{_arrow_keys[get_key_press()]}_arrow"
+			return f"{_ARROW_KEYS[get_key_press()]}_arrow"
 		return c
 	else:
 		if c == "\x1b":
 			get_key_press() # skip [
-			return f"{_arrow_keys[get_key_press()]}_arrow"
+			return f"{_ARROW_KEYS[get_key_press()]}_arrow"
 		return c.lower()
 
-def get_key_press(wait = False) -> str:
+def get_key_press(wait = False) -> str | None:
 	if os.name == "nt":
 		from msvcrt import getch, kbhit
 		if wait or kbhit():

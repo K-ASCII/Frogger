@@ -67,7 +67,7 @@ class Colour:
 		self.g = g
 		self.b = b
 
-	def to_str(self):
+	def __str__(self) -> str:
 		return f'\x1b[38;2;{int(self.r)};{int(self.g)};{int(self.b)}m'
 
 class GameObject:
@@ -112,7 +112,7 @@ class Screen:
 	def clear(self):
 		"""Clear the entire screen with the set bg char and colour"""
 		if self.bg_colour is not None:
-			self._pixels = [f"{self.bg_colour.to_str()}{self.bg_char}{Colour.END}" for _ in range(self.size.x * self.size.y)]
+			self._pixels = [f"{self.bg_colour}{self.bg_char}{Colour.END}" for _ in range(self.size.x * self.size.y)]
 		else:
 			self._pixels = [self.bg_char for _ in range(self.size.x * self.size.y)]
 
@@ -128,7 +128,7 @@ class Screen:
 
 		to_plot = char
 		if colour is not None:
-			to_plot = colour.to_str() + char + Colour.END
+			to_plot = str(colour) + char + Colour.END
 
 		self._pixels[pos.y * self.size.x + pos.x] = to_plot
 
